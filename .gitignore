@@ -1,0 +1,35 @@
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# --- FastF1 cache (large, regenerable, don't commit) ---
+ff1_cache/
+session_dump/
+
+# --- Go ---
+/ingest/bin/
+*.exe
+*.test
+
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+!*.tfvars.example
+
+# --- Helm ---
+*.tgz
+
+# --- Secrets / local config ---
+.env
+*.local.yaml
+gcloud-service-account*.json
+
+# --- OS / editor cruft ---
+.DS_Store
+.vscode/
+.idea/
