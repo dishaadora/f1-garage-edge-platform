@@ -67,8 +67,8 @@ plainly here rather than left for a reviewer to discover.
  └─────────────────────────────────────────────────────────────┼────────────────┘
                                                                   │ (when link is up)
                                                                   ▼
- ┌──────────────────────────────── Cloud (GCP) ──────────────────────────────────┐
- │   GCS (raw sync)  ──▶  dbt / Spark  ──▶  season-wide marts (BigQuery)         │
+ ┌──────────────────────────────── Cloud (AWS) ──────────────────────────────────┐
+ │   S3 (raw sync)  ──▶  dbt / Spark  ──▶  season-wide marts (Redshift)          │
  └────────────────────────────────────────────────────────────────────────────────┘
 
  Observability (both sides): Prometheus ── Grafana ── Loki
