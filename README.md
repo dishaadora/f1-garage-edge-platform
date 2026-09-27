@@ -118,9 +118,8 @@ see the roadmap below.
 
 ## Roadmap
 
-- [x] Stage 0 — Data exploration (FastF1 session shape, channels, sample rate)
-- [x] Stage 0 — Replay engine (simulated live telemetry feed)
-- [ ] Stage 1 — Local ingest pipeline (Go service → Parquet → DuckDB queries)
+- [x] Stage 0 — Data exploration (FastF1 session shape, channels, sample rate), Replay engine (simulated live telemetry feed)
+- [x] Stage 1 — Local ingest pipeline + multi-lap support (Go service → Parquet → DuckDB queries)
 - [ ] Stage 2 — Containerize + Helm chart
 - [ ] Stage 3 — Terraform provisioning for trackside nodes
 - [ ] Stage 4 — Cloud sync worker + dbt marts
