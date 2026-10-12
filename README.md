@@ -120,7 +120,7 @@ see the roadmap below.
 
 - [x] Stage 0 — Data exploration (FastF1 session shape, channels, sample rate), Replay engine (simulated live telemetry feed)
 - [x] Stage 1 — Local ingest pipeline + multi-lap support (Go service → Parquet → DuckDB queries)
-- [ ] Stage 2 — Containerize + Helm chart
+- [x] Stage 2 — Containerize + Helm chart
 - [ ] Stage 3 — Terraform provisioning for trackside nodes
 - [ ] Stage 4 — Cloud sync worker + dbt marts
 - [ ] Stage 5 — Observability (Prometheus, Grafana, Loki)
