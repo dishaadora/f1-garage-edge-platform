@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-query
+  labels:
+    app: {{ .Release.Name }}-query
+spec:
+  # Also fixed at 1: multiple query replicas would each hold their own
+  # DuckDB connection re-scanning the same files, which is harmless
+  # correctness-wise (reads are safe to parallelize) but adds nothing
+  # at this scale -- not worth the complexity of exposing it yet.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-query
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-query
+    spec:
+      containers:
+        - name: query
+          image: "{{ .Values.query.image.repository }}:{{ .Values.query.image.tag }}"
+          imagePullPolicy: {{ .Values.query.image.pullPolicy }}
+          args:
+            - "--session-id={{ .Values.session.id }}"
+            - "--data-dir=/data"
+            - "--port={{ .Values.query.port }}"
+          ports:
+            - containerPort: {{ .Values.query.port }}
+          volumeMounts:
+            - name: garage-data
+              mountPath: /data
+              readOnly: true
+      volumes:
+        - name: garage-data
+          hostPath:
+            path: {{ .Values.storage.hostPath }}
+            type: DirectoryOrCreate

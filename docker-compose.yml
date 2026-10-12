@@ -1,0 +1,24 @@
+services:
+  ingest:
+    build: ./ingest
+    ports:
+      - "8080:8080"
+    command: ["--session-id", "2024-monza-R", "--data-dir", "/data", "--flush-interval", "5s"]
+    volumes:
+      # Bind mount, not a named volume: lets you inspect the Parquet
+      # files directly on the host while debugging (as we did earlier
+      # with the folder-naming bug), at the cost of being slightly
+      # less portable across machines/OSes than a named volume.
+      - ./ingest/data:/data
+
+  query:
+    build: ./query
+    ports:
+      - "8000:8000"
+    command: ["--session-id", "2024-monza-R", "--data-dir", "/data", "--port", "8000"]
+    volumes:
+      # Same host folder as ingest, mounted read-only -- the query
+      # service only ever reads these files, never writes them.
+      - ./ingest/data:/data:ro
+    depends_on:
+      - ingest

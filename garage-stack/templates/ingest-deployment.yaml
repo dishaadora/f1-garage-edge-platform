@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ingest
+  labels:
+    app: {{ .Release.Name }}-ingest
+spec:
+  # Deliberately NOT scalable: the ingest service owns an in-memory
+  # buffer and the local Parquet write path for ONE trackside node.
+  # Running >1 replica would mean two processes independently
+  # buffering/flushing and racing on the same files -- this breaks
+  # the buffering design verified in Stage 1. replicas is fixed at 1,
+  # not exposed in values.yaml, on purpose.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-ingest
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-ingest
+    spec:
+      containers:
+        - name: ingest
+          image: "{{ .Values.ingest.image.repository }}:{{ .Values.ingest.image.tag }}"
+          imagePullPolicy: {{ .Values.ingest.image.pullPolicy }}
+          args:
+            - "--session-id={{ .Values.session.id }}"
+            - "--data-dir=/data"
+            - "--flush-interval={{ .Values.ingest.flushInterval }}"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: garage-data
+              mountPath: /data
+      volumes:
+        - name: garage-data
+          hostPath:
+            path: {{ .Values.storage.hostPath }}
+            type: DirectoryOrCreate

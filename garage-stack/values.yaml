@@ -1,0 +1,36 @@
+# The one value you'll actually change per race weekend:
+#   helm install garage-stack ./garage-stack --set session.id=2024-silverstone-Q
+session:
+  id: default-session
+
+ingest:
+  image:
+    repository: f1-ingest
+    tag: latest
+    # Local images (not yet pushed to a registry) -- IfNotPresent means
+    # Kubernetes uses whatever's already loaded into the cluster rather
+    # than trying to pull from a registry that doesn't have it. Swap to
+    # Always once images live in a real registry (Stage 4+).
+    pullPolicy: IfNotPresent
+  port: 8080
+  flushInterval: 5s
+  # NodePort, not LoadBalancer: no cloud load balancer or MetalLB
+  # add-on needed -- fits a single-node trackside cluster with no
+  # cloud dependency. 30080/30081 are in Kubernetes' default NodePort
+  # range (30000-32767).
+  nodePort: 30080
+
+query:
+  image:
+    repository: f1-query
+    tag: latest
+    pullPolicy: IfNotPresent
+  port: 8000
+  nodePort: 30081
+
+storage:
+  # hostPath, not a PersistentVolumeClaim: this chart models ONE
+  # physical trackside node, not a portable multi-node cluster -- the
+  # data is meant to live on that specific machine. Revisit this if
+  # the architecture ever becomes multi-node.
+  hostPath: /data/garage-stack

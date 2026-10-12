@@ -1,0 +1,9 @@
+apiVersion: v2
+name: garage-stack
+description: >
+  Trackside edge platform for one F1 "garage" -- the ingest service and
+  DuckDB query API deployed together as a single package, matching the
+  "same chart redeploys to every circuit" architecture.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

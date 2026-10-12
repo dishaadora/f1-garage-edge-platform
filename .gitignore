@@ -33,3 +33,7 @@ gcloud-service-account*.json
 .DS_Store
 .vscode/
 .idea/
+
+ingest/data/
+ingest/ingest
+kind.exe
